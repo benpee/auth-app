@@ -1,0 +1,36 @@
+import { Switch, Route, Redirect } from 'react-router-dom';
+
+import Layout from './components/Layout/Layout';
+import UserProfile from './components/Profile/UserProfile';
+import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
+import { useContext } from 'react'
+import AuthContext from './store/auth-context';
+
+
+function App() {
+  const authCtx = useContext(AuthContext);
+  const isLoggedIn = authCtx.isLoggedIn;
+  return (
+    <Layout>
+      <Switch>
+        <Route path='/' exact>
+          <HomePage />
+        </Route>
+        <Route path='/auth'>
+          {!isLoggedIn && <AuthPage />}
+        </Route>
+        <Route path='/profile'>
+          {isLoggedIn && <UserProfile />}
+          {!isLoggedIn && <Redirect to='/auth' />}
+        </Route>
+        <Route path='*'>
+          {/* <p>Error 404: Page not found</p> */}
+          <Redirect to='/'></Redirect>
+        </Route>
+      </Switch>
+    </Layout>
+  );
+}
+
+export default App;
